@@ -1,0 +1,63 @@
+<div>
+  <mat-card>
+    <mat-card-title>Registered Hotels</mat-card-title>
+    <mat-card-content>
+      <div class="content-section implementation">
+        <p-table #dt [columns]="cols" styleClass="ui-table-cars" [value]="hotels" dataKey="name" selectionMode="single" [(selection)]="selectedHotel"
+        [lazy]="true" (onLazyLoad)="lazyLoadHotels($event)" [paginator]="true" [rows]="10" [totalRecords]="totalRecords" [loading]="loading"
+        >
+          <ng-template pTemplate="caption">
+              <div class="ui-table-globalfilter-container">
+                <button (click)="addNewHotel()" mat-raised-button color="primary" style="margin-bottom: 10px;">Add Hotel</button>
+              </div>
+          </ng-template>
+          <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field" [pSortableColumnDisabled]="col.field === 'availableFrom' || col.field == 'availableTo'">
+                  {{col.header}}
+                  <p-sortIcon *ngIf="(col.field !== 'availableFrom' || col.field !== 'availableTo')" [field]="col.field" ariaLabel="Sort By" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                </th>
+                <th>
+                  <button pButton type="button" icon="pi pi-cog"></button>
+                </th>
+                <tr>
+                
+              </tr>
+              <tr>
+                <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                  <input *ngSwitchCase="'name'" pInputText type="text" placeholder="Contains"  style="width: 100%;" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                  <input *ngSwitchCase="'price'" pInputText type="text" placeholder="Less than equals"  style="width: 100%;" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                  <input *ngSwitchCase="'city'" pInputText type="text" placeholder="Contains" style="width: 100%;" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                  <input *ngSwitchCase="'availableFrom'" pInputText type="text" placeholder="MM/DD/YYY" style="width: 100%;" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                  <input *ngSwitchCase="'availableTo'" pInputText type="text" placeholder="MM/DD/YYY" style="width: 100%;" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                </th>
+                <th style="width: 8em; text-align: center;">
+                </th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [pSelectableRow]="rowData" [pEditableRow]="rowData">
+                  <td>{{rowData.name}}</td>
+                  <td>{{rowData.price}}</td>
+                  <td>{{rowData.city}}</td>
+                  <td>
+                    <tr *ngFor="let available of rowData.availability;let isLast=last;">
+                      <td>{{available.from | date:'MM/dd/yyyy'}}{{isLast ? '' : ', '}}
+                    </tr>
+                  </td>
+                  <td>
+                    <tr *ngFor="let available of rowData.availability;let isLast=last;">
+                      <td>{{available.to | date:'MM/dd/yyyy'}}{{isLast ? '' : ', '}}
+                    </tr>
+                  </td>
+                  <td>
+                      <button pButton type="button" class="ui-button-success" icon="pi pi-pencil" style="margin-right: .5em" (click)="onEdit(rowData._id)"></button>
+                      <button pButton type="button" class="ui-button-danger" icon="pi pi-trash" (click)="onDelete(rowData._id)"></button>
+                  </td>
+              </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

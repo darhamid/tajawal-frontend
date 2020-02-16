@@ -1,0 +1,75 @@
+<div>
+  <mat-card>
+    <mat-card-title>Add Hotel</mat-card-title>
+    <mat-card-content class="container">
+      <form class="register-form" [formGroup]="addHotelForm">
+        <div>
+          <div fxLayout="column">
+            <div fxLayout="column" fxLayoutAlign="center stretch" class="row">
+              <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center" class="row-example" style="width: 100%;">
+                <mat-form-field>
+                  <input matInput placeholder="Hotel Name" formControlName="name">
+                  <mat-error *ngIf="addHotelForm.get('name').hasError('required')">
+                    Hotel name is required
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                  <input type="number" min="1" matInput placeholder="Price" formControlName="price">
+                  <mat-error *ngIf="addHotelForm.get('price').hasError('required')">
+                    Price is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="left" class="row">
+              <div fxLayout="row" fxLayoutAlign="left" class="row-example" style="width: 100%;">
+                <mat-form-field style="float:left; margin-left: 20px;">
+                  <input matInput placeholder="City" formControlName="city">
+                  <mat-error *ngIf="addHotelForm.get('city').hasError('required')">
+                    City is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="row">
+            <mat-card style="width: 100%; margin-top:40px; margin-bottom: 30px; margin-left:-15px;">
+              <mat-card-title><h3>Available dates</h3></mat-card-title>
+              <div fxFlex="100" formArrayName="availability" *ngFor="let available of getControls(); let i = index;">
+                <div [formGroupName]="i">
+                  <div class="row" fxLayoutAlign="start center" class="row-example" style="width: 100%;">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="from" formControlName="from" >
+                      <mat-datepicker-toggle matSuffix [for]="from"></mat-datepicker-toggle>
+                      <mat-datepicker #from></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="to" formControlName="to" >
+                      <mat-datepicker-toggle matSuffix [for]="to"></mat-datepicker-toggle>
+                      <mat-datepicker #to></mat-datepicker>
+                    </mat-form-field>
+                    <button fxFlex="10%" fxFlex.xs="10" type="button" mat-mini-fab color="warn" fxFlex="nogrow" *ngIf="getControls().length > 1"
+                      (click)="removeAvailability(i)">
+                      <mat-icon>delete forever</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div layout-align="center center" style="margin:10px 500px; padding:5px">
+                <button type="button" mat-mini-fab color="success" fxLayoutAlign="space-between center"  (click)="addItem()">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </mat-card>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="row" style="display:flex; justify-content:flex-end; width:100%; padding:0;">
+            <button style="margin-top:20px; margin-right:16px"  mat-raised-button color="warn" (click)="cancelAdd()">Cancel</button>
+            <button style="margin-top:20px; margin-right:16px" [disabled]="!addHotelForm.valid" (click)="saveHotel(addHotelForm.value)" mat-raised-button color="primary">Save</button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
